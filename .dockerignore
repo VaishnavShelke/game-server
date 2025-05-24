@@ -1,0 +1,8 @@
+.git
+.gitignore
+.idea
+.cursor
+target
+logs
+*.md
+.DS_Store 
