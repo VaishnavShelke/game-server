@@ -2,22 +2,26 @@ version: '3.8'
 
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: game-server
     ports:
       - "8080:8080"
     environment:
-      - SPRING_TOKENMINTGLOBAL_DATASOURCE_JDBCURL=jdbc:mysql://localhost:3306/user_management_global?allowPublicKeyRetrieval=true&useSSL=false
+      - SPRING_TOKENMINTGLOBAL_DATASOURCE_JDBCURL=jdbc:mysql://tokenmint-mysql:3306/user_management_global?allowPublicKeyRetrieval=true&useSSL=false
       - SPRING_TOKENMINTGLOBAL_DATASOURCE_USERNAME=root
       - SPRING_TOKENMINTGLOBAL_DATASOURCE_PASSWORD=root
       - SPRING_TOKENMINTGLOBAL_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
       - SPRING_DEVTOOLS_RESTART_ENABLED=true
       - SPRING_THYMELEAF_CACHE=false
       - GAME_LANDING_PAGE=http://localhost:8080/battlegrounds/landingPage
-      - TOKENMINT_TRANSFER_TOKENS_REQUEST_URL=http://localhost:1001/tokenmint/createtoken/1001
+      - TOKENMINT_TRANSFER_TOKENS_REQUEST_URL=http://token-bridge-server:1001/tokenmint/createtoken/1001
       - SERVER_PORT=8080
     networks:
-      - game-network
+      - tokenmint-ecosystem
+    restart: unless-stopped
 
 networks:
-  game-network:
-    driver: bridge 
+  tokenmint-ecosystem:
+    external: true
