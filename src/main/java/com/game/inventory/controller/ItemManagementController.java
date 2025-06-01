@@ -18,6 +18,7 @@ import com.game.inventory.beans.ItemInfoBean;
 import com.game.inventory.beans.PlayerInfoEty;
 import com.game.inventory.beans.TokenmintIssueTransactionBean;
 import com.game.inventory.beans.TransferTokenEventRequest;
+import com.game.inventory.beans.TransferTokenEventResponse;
 import com.game.inventory.dao.ItemInfoDAO;
 import com.game.inventory.dao.PlayerInfoDAO;
 import com.game.inventory.service.TokenMintInterfaceHandler;
@@ -87,12 +88,13 @@ public class ItemManagementController {
 	
 	
 	@PostMapping(path = "/tokenTransferEventListener")
-	public String tokenTransferEventListener(@RequestBody  TransferTokenEventRequest request) {
+	public TransferTokenEventResponse tokenTransferEventListener(@RequestBody  TransferTokenEventRequest request) {
 		logger.debug("************************ Transfer Evelnt Listener Request ************************************");
         logger.info("Request Body  :: {}",Utility.getJsonFromObject(request));
-        transferTokenEventHandler.handleEvent(request);
+		TransferTokenEventResponse resp = transferTokenEventHandler.handleEvent(request);
+		logger.info("Handled tokenTransferEventListener from game server {}",resp);
         logger.debug("************************ Transfer Evelnt Listener Response ************************************");
-        return "dummypage.html";
+        return resp;
 	}
 	
 }
